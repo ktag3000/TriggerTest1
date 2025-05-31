@@ -4,6 +4,8 @@ public with sharing class OpportunityTriggerHelper {
     // After update
     //=======================
 
+    // TODO new idea. When an opp is closed won, mark the related account rating hot.
+
     // Reassign Oppty files to Account when closed
     //============================================
     // TODO handle exception is query does not return results
@@ -14,7 +16,6 @@ public with sharing class OpportunityTriggerHelper {
         // Loop over newOpptyList input with criteria
         for(Opportunity opp : newOpptyList){
             Opportunity oldOppty = oldMap.get(opp.id);
-            System.debug(oldOppty);
 
             if(opp.StageName == 'Closed Lost' && oldOppty.StageName != opp.StageName){
                 opptyIds.add(opp.Id);
@@ -24,19 +25,21 @@ public with sharing class OpportunityTriggerHelper {
         // If oppty id's are found then continue with querying the related files (CDL)
         Set<Id> contentDocIds = new Set<Id>();
 
+        // Query CDL's for triggering oppty
         if(!opptyIds.isEmpty()) {
-            for(List<ContentDocumentLink> cDL : [
+            List<ContentDocumentLink> opptyCDL = [
                 Select Id, ContentDocumentId, LinkedEntityId, ShareType, Visibility
                 FROM ContentDocumentLink
                 WHERE LinkedEntityId IN :opptyIds
-            ]){
-                System.debug('Content document query: ' +cDL);
-                // contentDocIds.add(cDL);
-            }
+            ];
+        
+        // Assign CDL's to account and insert
+        List<ContentDocumentLink> accUpdate = new List<ContentDocumentLink>();    
+        for(ContentDocumentLink cDL : opptyCDL){
+            Id accLinkedEntityId = cDL.LinkedEntityId;
+            System.debug('acclinkedentityid: ' +accLinkedEntityId);
+        }
+    //   insert accUpdate;  
         } 
-        System.debug('contentDocIds: ' +contentDocIds);
-
-        // Assign variables to create CDL on Account
-
-    } // insert account
+    } 
 }
