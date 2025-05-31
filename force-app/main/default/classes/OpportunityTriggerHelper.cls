@@ -1,5 +1,11 @@
 public with sharing class OpportunityTriggerHelper {
     
+    //======================
+    // After update
+    //=======================
+
+    // Reassign Oppty files to Account when closed
+    //==========================
     public static void reassignOpptyFiles(List<Opportunity> newOpptyList, Map<Id, Opportunity> oldMap){
 
         Set<Id> opptyIds = new Set<Id>(); // Declare the set to hold the oppty id from the trigger

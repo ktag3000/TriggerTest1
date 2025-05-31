@@ -1,6 +1,9 @@
 public with sharing class AccountTriggerHelper {
     
-    //======================================================
+    //=============================
+    // After update methods
+    //=============================
+
     // Identify Accounts whose Industry changed to "Church"
     //======================================================
     public static void updateOpptyDiscount(List<Account> newAccountList, Map<Id, Account> oldMap){
