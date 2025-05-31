@@ -1,6 +1,6 @@
 public with sharing class AccountTriggerHandler {
     
-    public static void beforeUpdate(List<Account> newAccountList, Map<Id, Account> oldMap) {
+    public static void afterUpdate(List<Account> newAccountList, Map<Id, Account> oldMap) {
     Set<Id> accountIds = new Set<Id>();
 
     //======================================================
