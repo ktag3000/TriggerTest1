@@ -5,7 +5,8 @@ public with sharing class OpportunityTriggerHelper {
     //=======================
 
     // Reassign Oppty files to Account when closed
-    //==========================
+    //============================================
+    // TODO handle exception is query does not return results
     public static void reassignOpptyFiles(List<Opportunity> newOpptyList, Map<Id, Opportunity> oldMap){
 
         Set<Id> opptyIds = new Set<Id>(); // Declare the set to hold the oppty id from the trigger
@@ -21,23 +22,21 @@ public with sharing class OpportunityTriggerHelper {
         }
 
         // If oppty id's are found then continue with querying the related files (CDL)
+        Set<Id> contentDocIds = new Set<Id>();
+
         if(!opptyIds.isEmpty()) {
-            List<ContentDocumentLink> contentDocLinkList = [
+            for(List<ContentDocumentLink> cDL : [
                 Select Id, ContentDocumentId, LinkedEntityId, ShareType, Visibility
                 FROM ContentDocumentLink
                 WHERE LinkedEntityId IN :opptyIds
-            ];
-        }
+            ]){
+                System.debug('Content document query: ' +cDL);
+                // contentDocIds.add(cDL);
+            }
+        } 
+        System.debug('contentDocIds: ' +contentDocIds);
 
         // Assign variables to create CDL on Account
-        if(!contentDocLinkList.isEmpty()){
-            for(ContentDocumentLink cdl : contentDocLinkList){
-                Id accContentDocumentId = cdl.ContentDocumentId;
-                Id accLinkedEntityId = cdl.LinkedEntityId;
-                String accShareType = cdl.ShareType;
-                String accVisibility = cdl.Visibility;
-            }
-        }
 
-    }
+    } // insert account
 }

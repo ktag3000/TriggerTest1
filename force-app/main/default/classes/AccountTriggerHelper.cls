@@ -6,6 +6,7 @@ public with sharing class AccountTriggerHelper {
 
     // Identify Accounts whose Industry changed to "Church"
     //======================================================
+    // TODO handle exception is query does not return results
     public static void updateOpptyDiscount(List<Account> newAccountList, Map<Id, Account> oldMap){
         Set<Id> accountIds = new Set<Id>();
     
