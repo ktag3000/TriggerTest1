@@ -4,8 +4,8 @@ public with sharing class CaseTriggerHandler {
         
         List<Case> casesNew = new List<Case>();
 
+        // If the new case priority is high, add High Priority to the case subject
         for(Case caseUpdate : newCase) {
-            
             if(caseUpdate.Priority == 'High'){
                 caseUpdate.Subject = caseUpdate.Subject + ' - High Priority';
             }
