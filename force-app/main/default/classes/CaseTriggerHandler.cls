@@ -1,5 +1,8 @@
 public with sharing class CaseTriggerHandler {
     
+    //===============
+    // Before Insert
+    //===============
     public static void beforeInsert(List<Case> newCase){
         
         List<Case> casesNew = new List<Case>();
