@@ -18,7 +18,7 @@ public with sharing class CaseTriggerHandler {
     //===============
     public static void afterUpdate(List<Case> newCases, Map<Id, Case> oldMap){
         
-        // Get related accounts
+        // Add related Account Id's to Set
         Set<Id> accIds = new Set<Id>();
 
         for(Case c : newCases){
@@ -30,6 +30,7 @@ public with sharing class CaseTriggerHandler {
         
         System.debug('accIds: ' +accIds);
 
+        // Get related Accounts 
         if(!accIds.isEmpty()){
             Account accountsToUpdate;
             for(Account acc : [
@@ -37,6 +38,7 @@ public with sharing class CaseTriggerHandler {
                 FROM Account
                 WHERE Id IN :accIds
             ]){
+                // Check the Account close case count field value
                 if(acc.Closed_Case_Count__c == null){
                     acc.Closed_Case_Count__c = 1;
                     accountsToUpdate = acc;
