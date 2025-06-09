@@ -1,5 +1,23 @@
 public with sharing class AccountTriggerHelper {
     
+    //================
+    // Before Insert
+    //================
+
+    // Set default Account Type to Customer - Direct if it's blank
+    public static void accountType(List<Account> newAccountList){
+        System.debug('Test accountType()');
+        System.debug('accountType() newAccountList: ' +newAccountList); 
+
+        // Check if the current item in the loop has a blank Type field
+        for(Account acc : newAccountList){
+            if(acc.Type == null){
+                acc.Type = 'Customer - Direct';
+            }
+        }
+
+    }
+
     //=============================
     // After update methods
     //=============================
