@@ -19,7 +19,7 @@ public with sharing class AccountTriggerHelper {
     }
 
     //=============================
-    // After update methods
+    // After update 
     //=============================
 
     // Identify Accounts whose Industry changed to "Church"
