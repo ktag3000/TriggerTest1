@@ -26,7 +26,7 @@ public with sharing class HandleDuplicatesInFlow {
                 Database.SaveResult srContact = Database.insert(con, dml);
                 if (srContact.isSuccess()) {
                     savedIds.add(srContact.getId());
-                    System.debug('contactId:' +record.contactId);
+                    // System.debug('contactId:' +record.contactId);
                 }
             }
             
@@ -36,7 +36,7 @@ public with sharing class HandleDuplicatesInFlow {
                 Database.SaveResult srAccount = Database.insert(acc, dml);
                 if (srAccount.isSuccess()) {
                     savedIds.add(srAccount.getId());
-                    System.debug('accountId:' +record.accountId);
+                    // System.debug('accountId:' +record.accountId);
                 }
             }
         }
