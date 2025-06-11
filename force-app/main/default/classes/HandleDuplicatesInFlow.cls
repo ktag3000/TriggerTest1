@@ -9,10 +9,11 @@ public with sharing class HandleDuplicatesInFlow {
         public Id accountId;
     }
 
-    // 
+    // Method called by flow
     @InvocableMethod(label='Handle Duplicate Record')
     public static List<Id> saveDuplicates(List<FlowInputs> inputRecords) {
         List<Id> savedIds = new List<Id>();
+        System.debug('Test');
 
         for (FlowInputs record : inputRecords) {
             Database.DMLOptions dml = new Database.DMLOptions();
@@ -25,15 +26,17 @@ public with sharing class HandleDuplicatesInFlow {
                 Database.SaveResult srContact = Database.insert(con, dml);
                 if (srContact.isSuccess()) {
                     savedIds.add(srContact.getId());
+                    System.debug('contactId:' +record.contactId);
                 }
             }
-
+            
             // Insert Account using input variable
             if (record.accountId != null) {
                 Account acc = [SELECT Id, Name FROM Account WHERE Id = :record.accountId LIMIT 1];
                 Database.SaveResult srAccount = Database.insert(acc, dml);
                 if (srAccount.isSuccess()) {
                     savedIds.add(srAccount.getId());
+                    System.debug('accountId:' +record.accountId);
                 }
             }
         }
