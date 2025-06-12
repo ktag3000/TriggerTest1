@@ -5,6 +5,7 @@
     "**/.sfdx": true
   },
   "workbench.colorCustomizations": {
+    "tab.activeBorder": "#d19a66",
     "statusBar.background": "#2f53a8",
     "activityBar.background": "#2f53a8"
   },
