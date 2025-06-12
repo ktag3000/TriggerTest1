@@ -22,7 +22,7 @@ public with sharing class HandleDuplicatesInFlow {
 
             // Insert Contact using input variable
             if (record.contactId != null) {
-                Contact con = [SELECT Id, FirstName, LastName, Email, AccountId FROM Contact WHERE Id = :record.contactId LIMIT 1];
+                Contact con = [SELECT Id FROM Contact WHERE Id = :record.contactId LIMIT 1];
                 Database.SaveResult srContact = Database.insert(con, dml);
                 if (srContact.isSuccess()) {
                     savedIds.add(srContact.getId());
@@ -32,7 +32,7 @@ public with sharing class HandleDuplicatesInFlow {
             
             // Insert Account using input variable
             if (record.accountId != null) {
-                Account acc = [SELECT Id, Name FROM Account WHERE Id = :record.accountId LIMIT 1];
+                Account acc = [SELECT Id FROM Account WHERE Id = :record.accountId LIMIT 1];
                 Database.SaveResult srAccount = Database.insert(acc, dml);
                 if (srAccount.isSuccess()) {
                     savedIds.add(srAccount.getId());
