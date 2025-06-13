@@ -12,13 +12,12 @@ public with sharing class HandleDuplicatesInFlow {
     // Method called by flow
     @InvocableMethod(label='Handle Duplicate Record')
     public static void saveDuplicates(List<FlowInputs> inputRecords) {
-        List<Id> savedIds = new List<Id>();
         
         // Define variables to store Contact and Account Id's
         Id contactId;
         Id accountId;
 
-        // Loop over flow inputs List to assign object id's
+        // Loop over flow inputs list to assign object id's
         for (FlowInputs record : inputRecords) {
              
             if(record.contactId != null){
@@ -40,7 +39,6 @@ public with sharing class HandleDuplicatesInFlow {
             Contact contactRecord = [SELECT Id FROM Contact WHERE Id = :contactId];
             Database.SaveResult srContact = Database.update(contactRecord, dml);
             if (srContact.isSuccess()) {
-                savedIds.add(srContact.getId());
                 System.debug('Contact success: ' +contactId);
             } else {
                 System.debug('Contact failed: '+srContact.errors);
@@ -51,7 +49,6 @@ public with sharing class HandleDuplicatesInFlow {
             Account accountRecord = [SELECT Id FROM Account WHERE Id = :accountId];
             Database.SaveResult srAccount = Database.update(accountRecord, dml);
             if (srAccount.isSuccess()) {
-                    savedIds.add(srAccount.getId());
                     System.debug('Account success: ' +accountId);
                 } else {
                     System.debug('Account failed: ' +srAccount.errors);
