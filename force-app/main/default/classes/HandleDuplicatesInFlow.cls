@@ -13,37 +13,49 @@ public with sharing class HandleDuplicatesInFlow {
     @InvocableMethod(label='Handle Duplicate Record')
     public static void saveDuplicates(List<FlowInputs> inputRecords) {
         List<Id> savedIds = new List<Id>();
-        // System.debug('Test');
+        
+        // Define variables to store Contact and Account Id's
+        Id contactId;
+        Id accountId;
 
-        // Loop over flow inputs and set options to bypass duplicates
+        // Loop over flow inputs List to assign object id's
         for (FlowInputs record : inputRecords) {
-            Database.DMLOptions dml = new Database.DMLOptions();
-            dml.DuplicateRuleHeader.allowSave = true; // Allows the duplicate to save
-            dml.DuplicateRuleHeader.runAsCurrentUser = true; // Runs with sharing context
+             
+            if(record.contactId != null){
+                contactId = record.contactId;
+             }
 
-            // Insert Contact using input variable
-            if (record.contactId != null) {
-                Contact con = [SELECT Id, FirstName FROM Contact WHERE Id = :record.contactId LIMIT 1];
-                Database.SaveResult srContact = Database.update(con, dml);
-                if (srContact.isSuccess()) {
-                    savedIds.add(srContact.getId());
-                    System.debug('contact success: ' +record.contactId);
-                } else {
-                    System.debug('contact failed: '+srContact.errors);
-                }
+            if(record.accountId != null){
+                accountId = record.accountId;
             }
-            
-            // Insert Account using input variable
-            if (record.accountId != null) {
-                Account acc = [SELECT Id, Name FROM Account WHERE Id = :record.accountId LIMIT 1];
-                Database.SaveResult srAccount = Database.update(acc, dml);
-                if (srAccount.isSuccess()) {
+        }
+
+        // Set DML options for duplicates
+        Database.DMLOptions dml = new Database.DMLOptions();
+        dml.DuplicateRuleHeader.allowSave = true; // Allows the duplicate to save
+        dml.DuplicateRuleHeader.runAsCurrentUser = true; // Runs with sharing context
+        
+        // Assign id's to a record and update
+        if(contactId != null){
+            Contact contactRecord = [SELECT Id FROM Contact WHERE Id = :contactId];
+            Database.SaveResult srContact = Database.update(contactRecord, dml);
+            if (srContact.isSuccess()) {
+                savedIds.add(srContact.getId());
+                System.debug('Contact success: ' +contactId);
+            } else {
+                System.debug('Contact failed: '+srContact.errors);
+            }
+        }
+        
+        if(accountId != null){
+            Account accountRecord = [SELECT Id FROM Account WHERE Id = :accountId];
+            Database.SaveResult srAccount = Database.update(accountRecord, dml);
+            if (srAccount.isSuccess()) {
                     savedIds.add(srAccount.getId());
-                    System.debug('account success: ' +record.accountId);
+                    System.debug('Account success: ' +accountId);
                 } else {
-                    System.debug('account failed: ' +srAccount.errors);
+                    System.debug('Account failed: ' +srAccount.errors);
                 }
-            }
         }
     }
 }
