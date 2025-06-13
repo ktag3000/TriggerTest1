@@ -11,10 +11,11 @@ public with sharing class HandleDuplicatesInFlow {
 
     // Method called by flow
     @InvocableMethod(label='Handle Duplicate Record')
-    public static void /*List<Id>*/ saveDuplicates(List<FlowInputs> inputRecords) {
+    public static void saveDuplicates(List<FlowInputs> inputRecords) {
         List<Id> savedIds = new List<Id>();
-        System.debug('Test');
+        // System.debug('Test');
 
+        // Loop over flow inputs and set options to bypass duplicates
         for (FlowInputs record : inputRecords) {
             Database.DMLOptions dml = new Database.DMLOptions();
             dml.DuplicateRuleHeader.allowSave = true; // Allows the duplicate to save
@@ -23,8 +24,6 @@ public with sharing class HandleDuplicatesInFlow {
             // Insert Contact using input variable
             if (record.contactId != null) {
                 Contact con = [SELECT Id, FirstName FROM Contact WHERE Id = :record.contactId LIMIT 1];
-                // Database.SaveResult srContact = Database.insert(con, dml);
-                con.FirstName = con.FirstName +123;
                 Database.SaveResult srContact = Database.update(con, dml);
                 if (srContact.isSuccess()) {
                     savedIds.add(srContact.getId());
@@ -37,8 +36,6 @@ public with sharing class HandleDuplicatesInFlow {
             // Insert Account using input variable
             if (record.accountId != null) {
                 Account acc = [SELECT Id, Name FROM Account WHERE Id = :record.accountId LIMIT 1];
-                // Database.SaveResult srAccount = Database.insert(acc, dml);
-                acc.Name = acc.Name +123;
                 Database.SaveResult srAccount = Database.update(acc, dml);
                 if (srAccount.isSuccess()) {
                     savedIds.add(srAccount.getId());
@@ -48,6 +45,5 @@ public with sharing class HandleDuplicatesInFlow {
                 }
             }
         }
-        // return savedIds;
     }
 }
