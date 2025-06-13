@@ -1,0 +1,23 @@
+<template>
+     <div class="container">
+    <span class="digit" id="hr">00</span>
+    <span class="txt">:</span>
+    <span class="digit" id="min">00</span>
+    <span class="txt">:</span>
+    <span class="digit" id="sec">00</span>
+    <span class="txt"></span>
+    <span class="digit" id="count">00</span>
+
+    <div class="buttons">
+       <lightning-button label="Start"
+       title="start"
+       onclick={handleStart}></lightning-button>
+       <lightning-button label="Stop"
+       title="stop"
+       onclick={handleStop}></lightning-button>
+       <lightning-button label="Reset"
+       title="reset"
+       onclick={handleReset}></lightning-button>
+    </div>
+  </div>
+</template>
