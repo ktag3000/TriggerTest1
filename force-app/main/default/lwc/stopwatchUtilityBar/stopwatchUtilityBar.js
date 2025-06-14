@@ -4,6 +4,7 @@ export default class StopWatch extends LightningElement {
 
     timer = '00:00:00'
     timerRef
+    isRunning = false
     
     actionHandler(event){
         const {label} = event.target
@@ -26,6 +27,7 @@ export default class StopWatch extends LightningElement {
         window.localStorage.setItem('startTimer', startTime)
         return startTime
     }
+    
     setTimer(){
         const startTime = new Date( window.localStorage.getItem("startTimer") || this.StartTimerHandler())
         this.timerRef = window.setInterval(()=>{
@@ -41,17 +43,6 @@ secondToHms(d) {
     const s = String(Math.floor(d % 60)).padStart(2, '0');
     return `${h}:${m}:${s}`;
 }
-
-    // secondToHms(d){
-    //     d = Number(d)
-    //     const h = Math.floor(d / 3600);
-    //     const m = Math.floor(d % 3600 / 60);
-    //     const s = Math.floor(d % 3600 % 60);
-    //     const hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-    //     const mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-    //     const sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-    //     return hDisplay + mDisplay + sDisplay; 
-    // }
 
     connectedCallback(){
         if(window.localStorage.getItem("startTimer")){
