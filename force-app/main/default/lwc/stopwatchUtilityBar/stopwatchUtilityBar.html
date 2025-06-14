@@ -1,23 +1,12 @@
 <template>
-     <div class="container">
-    <span class="digit" id="hr">00</span>
-    <span class="txt">:</span>
-    <span class="digit" id="min">00</span>
-    <span class="txt">:</span>
-    <span class="digit" id="sec">00</span>
-    <span class="txt"></span>
-    <span class="digit" id="count">00</span>
-
-    <div class="buttons">
-       <lightning-button label="Start"
-       title="start"
-       onclick={handleStart}></lightning-button>
-       <lightning-button label="Stop"
-       title="stop"
-       onclick={handleStop}></lightning-button>
-       <lightning-button label="Reset"
-       title="reset"
-       onclick={handleReset}></lightning-button>
+    <div class="slds-card slds-p-around_medium">
+        <div class="timer" style="text-align: center; font-size: 2rem;">{timer}</div>
+        <div class="slds-p-around_medium" style="text-align: center;">
+            <lightning-button-group>
+                <lightning-button variant="success" label="Start" onclick={actionHandler}></lightning-button>
+                <lightning-button variant="destructive" label="Stop" onclick={actionHandler}></lightning-button>
+                <lightning-button variant="brand" label="Reset" onclick={actionHandler}></lightning-button>
+            </lightning-button-group>
+        </div>
     </div>
-  </div>
 </template>

@@ -1,61 +1,61 @@
 import { LightningElement } from 'lwc';
-export default class StopwatchUtilityBar extends LightningElement {
-startTime;
-  elapsedTime = 0;
-  timer = false;
-  interval;
 
-  startStyle = '';
-  stopStyle = 'display: none;';
+export default class StopWatch extends LightningElement {
 
-  handleStart() {
-    if (!this.timer) {
-      this.startTime = performance.now() - this.elapsedTime;
-      this.timer = true;
-      this.startStyle = 'display: none;';
-      this.stopStyle = 'display: inline-block;';
-      this.runTimer();
+    timer = '00:00:00'
+    timerRef
+    
+    actionHandler(event){
+        const {label} = event.target
+        if(label === 'Start'){
+            this.setTimer()
+        }
+        if(label === 'Stop'){
+            window.clearInterval(this.timerRef)
+            window.localStorage.removeItem('startTimer')
+        }
+        if(label === 'Reset'){
+            this.timer='00:00:00'
+            window.clearInterval(this.timerRef)
+            window.localStorage.removeItem('startTimer')
+        }
+        
     }
-  }
-
-  handleStop() {
-    this.timer = false;
-    this.elapsedTime = performance.now() - this.startTime;
-    clearTimeout(this.interval);
-    this.startStyle = 'display: inline-block;';
-    this.stopStyle = 'display: none;';
-  }
-
-  handleReset() {
-    this.timer = false;
-    this.elapsedTime = 0;
-    clearTimeout(this.interval);
-    this.updateDisplay(0, 0, 0, 0);
-    this.startStyle = 'display: inline-block;';
-    this.stopStyle = 'display: none;';
-  }
-
-  runTimer() {
-    if (this.timer) {
-      const now = performance.now();
-      this.elapsedTime = now - this.startTime;
-
-      let totalMilliseconds = Math.floor(this.elapsedTime);
-      let count = Math.floor((totalMilliseconds % 1000) / 10);
-      let second = Math.floor((totalMilliseconds / 1000) % 60);
-      let minute = Math.floor((totalMilliseconds / (1000 * 60)) % 60);
-      let hour = Math.floor((totalMilliseconds / (1000 * 60 * 60)) % 24);
-
-      this.updateDisplay(hour, minute, second, count);
-
-      this.interval = setTimeout(() => this.runTimer(), 10);
+    StartTimerHandler(){
+        const startTime = new Date()
+        window.localStorage.setItem('startTimer', startTime)
+        return startTime
     }
-  }
+    setTimer(){
+        const startTime = new Date( window.localStorage.getItem("startTimer") || this.StartTimerHandler())
+        this.timerRef = window.setInterval(()=>{
+            const secsDiff = new Date().getTime() - startTime.getTime()
+            this.timer = this.secondToHms(Math.floor(secsDiff/1000))
+        }, 1000)
+    }
 
-  updateDisplay(hr, min, sec, count) {
-    this.template.querySelector('#hr').textContent = hr < 10 ? '0' + hr : hr;
-    this.template.querySelector('#min').textContent = min < 10 ? '0' + min : min;
-    this.template.querySelector('#sec').textContent = sec < 10 ? '0' + sec : sec;
-    this.template.querySelector('#count').textContent = count < 10 ? '0' + count : count;
-  }
+secondToHms(d) {
+    d = Number(d);
+    const h = String(Math.floor(d / 3600)).padStart(2, '0');
+    const m = String(Math.floor((d % 3600) / 60)).padStart(2, '0');
+    const s = String(Math.floor(d % 60)).padStart(2, '0');
+    return `${h}:${m}:${s}`;
+}
+
+    // secondToHms(d){
+    //     d = Number(d)
+    //     const h = Math.floor(d / 3600);
+    //     const m = Math.floor(d % 3600 / 60);
+    //     const s = Math.floor(d % 3600 % 60);
+    //     const hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+    //     const mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+    //     const sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+    //     return hDisplay + mDisplay + sDisplay; 
+    // }
+
+    connectedCallback(){
+        if(window.localStorage.getItem("startTimer")){
+            this.setTimer()
+        }
+    }
 }
